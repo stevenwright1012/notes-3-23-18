@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Item from "./Item"
 
 class App extends Component {
   // state holds the data specific to that component
   //we must first initialize state, it must be created before we can change it/edit it/whatever....
-  constructor(props){
-    super(props);
+  constructor(){
+    super();
 
     this.state = {
       list: ['Learn React', 'Rule The World', 'Master the potty'],
       inputValue: '',
     }
+    //binding happens inside the constructor function but outside/below state
+    //if you are passing a funtion through props, you must ALWAYS BIND
+    this.saveToList = this.saveToList.bind(this)
+    this.saveInputValue = this.saveInputValue.bind(this)
   }
   saveInputValue(e){
     //set state is a method that takes an object as an argument that object should havw the property name on state that you want to update
@@ -34,22 +37,22 @@ saveToList(){
   render() {
     let newList = this.state.list.map((val, i) =>{
       return (
-        <div key={i + val}>
-          <input type= "checkbox" />
-          <p>{val}</p>
+        <div>
+          <input type="checkbox"/>
+          <h1>{val}</h1>
         </div>
-      );
-    });
+      )
+    })
     return (
       <div className="App">
-      <Item />
+      
       <input 
         type="text" 
         placeholder='Add new item...'
-        onChange={(event) => this.saveInputValue(event)}
+        onChange={this.saveInputValue}
         value={this.state.inputValue}
       />
-      <button onClick ={() => this.saveToList()}>Add Item</button>
+      <Item save={this.saveToList}/>
       {newList}
       </div>
     );
